@@ -1,4 +1,5 @@
 defmodule SpeeddateWeb.Router do
+  import Phoenix.LiveView.Router
   use SpeeddateWeb, :router
 
   pipeline :browser do
@@ -16,7 +17,7 @@ defmodule SpeeddateWeb.Router do
   scope "/", SpeeddateWeb do
     pipe_through :browser
 
-    get "/", PageController, :index
+    live "/", ChatLive
   end
 
   # Other scopes may use custom stacks.

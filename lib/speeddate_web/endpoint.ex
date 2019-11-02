@@ -1,6 +1,8 @@
 defmodule SpeeddateWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :speeddate
 
+  socket "/live", Phoenix.LiveView.Socket
+
   socket "/socket", SpeeddateWeb.UserSocket,
     websocket: true,
     longpoll: false

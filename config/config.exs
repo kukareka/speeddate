@@ -15,7 +15,8 @@ config :speeddate, SpeeddateWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "tyUdMti9KF6FhrPf4h6mJ4gc+DAqSsyEK0b1nmqE3o7NHqxVd/9jVbch6Xp2tWJe",
   render_errors: [view: SpeeddateWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Speeddate.PubSub, adapter: Phoenix.PubSub.PG2]
+  pubsub: [name: Speeddate.PubSub, adapter: Phoenix.PubSub.PG2],
+  live_view: [signing_salt: "VJ31dVFSQeni63fsdjY6roWQ9iKSDdyA"]
 
 # Configures Elixir's Logger
 config :logger, :console,

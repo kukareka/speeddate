@@ -8,6 +8,7 @@ defmodule Speeddate.Application do
   def start(_type, _args) do
     # List all child processes to be supervised
     children = [
+      Speeddate.Matcher,
       # Start the Ecto repository
       Speeddate.Repo,
       # Start the endpoint when the application starts
