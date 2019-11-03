@@ -9,8 +9,6 @@ defmodule Speeddate.Application do
     # List all child processes to be supervised
     children = [
       Speeddate.Matcher,
-      # Start the Ecto repository
-      Speeddate.Repo,
       # Start the endpoint when the application starts
       SpeeddateWeb.Endpoint
       # Starts a worker by calling: Speeddate.Worker.start_link(arg)

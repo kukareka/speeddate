@@ -7,9 +7,6 @@
 # General application configuration
 use Mix.Config
 
-config :speeddate,
-  ecto_repos: [Speeddate.Repo]
-
 # Configures the endpoint
 config :speeddate, SpeeddateWeb.Endpoint,
   url: [host: "localhost"],
