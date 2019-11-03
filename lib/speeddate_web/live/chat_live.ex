@@ -10,8 +10,22 @@ defmodule SpeeddateWeb.ChatLive do
   def try_match(socket) do
     case Speeddate.Matcher.match(self(), socket.assigns[:gender], socket.assigns[:blacklist]) do
       {:match, opponent_view} ->
-        send(opponent_view, %{message: "connect_offer", opponent_view: self(), opponent_name: socket.assigns[:name]})
-        assign(socket, state: :wait, opponent_view: opponent_view)
+        chat_topic = Ecto.UUID.generate
+        send(
+          opponent_view,
+          %{
+            message: "connect_offer",
+            opponent_view: self(),
+            opponent_name: socket.assigns[:name],
+            chat_topic: chat_topic
+          }
+        )
+        assign(
+          socket,
+          state: :wait,
+          opponent_view: opponent_view,
+          chat_topic: chat_topic
+        )
       {:no_match} -> assign(socket, state: :wait)
     end
   end
@@ -28,15 +42,16 @@ defmodule SpeeddateWeb.ChatLive do
       opponent_socket: nil
     )
 
-    socket = try_match(socket)
+    try_match(socket)
   end
 
   defp disconnect(socket) do
     IO.puts("disconnect: #{socket.assigns[:name]}")
 
     case socket.assigns.state do
-      :wait -> Speeddate.Matcher.disconnect(socket)
+      :wait -> Speeddate.Matcher.disconnect(self(), socket.assigns[:gender])
       :chat -> send(socket.assigns[:opponent_view], %{message: "peer_disconnected"})
+      no_match -> no_match
     end
   end
 
@@ -63,10 +78,11 @@ defmodule SpeeddateWeb.ChatLive do
     {:noreply, assign(socket, state: :sign_in)}
   end
 
-  def handle_info(%{message: "connect_offer", opponent_view: opponent_view, opponent_name: opponent_name}, socket) do
+  def handle_info(%{message: "connect_offer", opponent_view: opponent_view, opponent_name: opponent_name, chat_topic: chat_topic}, socket) do
     IO.puts("connect_offer: #{socket.assigns[:name]} => #{opponent_name}")
+
     send(opponent_view, %{message: "connect_answer", opponent_name: socket.assigns[:name]})
-    {:noreply, assign(socket, state: :chat, opponent_name: opponent_name, opponent_view: opponent_view)}
+    {:noreply, assign(socket, state: :chat, opponent_name: opponent_name, opponent_view: opponent_view, chat_topic: chat_topic)}
   end
 
   def handle_info(%{message: "connect_answer", opponent_name: opponent_name}, socket) do
@@ -88,7 +104,7 @@ defmodule SpeeddateWeb.ChatLive do
     Phoenix.View.render(SpeeddateWeb.PageView, "index.html", assigns)
   end
 
-  def terminate(reason, socket) do
+  def terminate(_reason, socket) do
     disconnect(socket)
   end
 end

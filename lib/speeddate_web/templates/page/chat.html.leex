@@ -1,3 +1,6 @@
 Chat with <%= @opponent_name %>
 <input type="button" phx-click="rematch" value="Rematch"/>
 <input type="button" phx-click="disconnect" value="Disconnect"/>
+
+<video id="localVideo" autoplay data-gender="<%= @gender %>" data-topic="chat:<%= @chat_topic %>"></video>
+<video id="remoteVideo" autoplay/></video>

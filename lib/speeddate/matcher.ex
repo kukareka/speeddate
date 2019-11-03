@@ -24,6 +24,12 @@ defmodule Speeddate.Matcher do
     end)
   end
 
+  def disconnect(view, gender) do
+    Agent.update(__MODULE__, fn queue ->
+      %{queue | gender => queue[gender] -- [view]}
+    end)
+  end
+
   defp find_match(_blacklist, []) do
     {:no_match}
   end
