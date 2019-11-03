@@ -13,7 +13,7 @@ config :speeddate, SpeeddateWeb.Endpoint,
   url: [host: "speeddate.kukareka.com", port: 443],
   https: [
     :inet6,
-    port: 443,
+    port: 4443,
     cipher_suite: :strong,
     keyfile: System.get_env("SPEEDDATE_SSL_KEY_PATH"),
     certfile: System.get_env("SPEEDDATE_SSL_CERT_PATH")
