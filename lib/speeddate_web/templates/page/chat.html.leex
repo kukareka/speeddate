@@ -1,6 +1,16 @@
-Chat with <%= @opponent_name %>
-<input type="button" phx-click="rematch" value="Rematch"/>
-<input type="button" phx-click="disconnect" value="Disconnect"/>
+<h2>Chat with <%= @opponent_name %></h2>
+<div class="videos">
+    <video id="localVideo" autoplay data-gender="<%= @gender %>" data-topic="chat:<%= @chat_topic %>"></video>
+    <video id="remoteVideo" autoplay/></video>
+</div>
+<div class="buttons">
+    <input type="button" phx-click="rematch" value="Rematch"/>
+    <input type="button" phx-click="disconnect" value="Disconnect"/>
+</div>
+<small>
+    <ul>
+        <li>Rematch - try to match with another opponent</li>
+        <li>Disconnect - return to sign in</li>
+    </ul>
+</small>
 
-<video id="localVideo" autoplay data-gender="<%= @gender %>" data-topic="chat:<%= @chat_topic %>"></video>
-<video id="remoteVideo" autoplay/></video>
