@@ -1,6 +1,6 @@
 <h2>Chat with <%= @opponent_name %></h2>
 <div class="videos">
-    <video id="localVideo" autoplay data-gender="<%= @gender %>" data-topic="chat:<%= @chat_topic %>"></video>
+    <video id="localVideo" autoplay muted="true" data-gender="<%= @gender %>" data-topic="chat:<%= @chat_topic %>"></video>
     <video id="remoteVideo" autoplay/></video>
 </div>
 <div class="buttons">
@@ -11,6 +11,8 @@
     <ul>
         <li>Rematch - try to match with another opponent</li>
         <li>Disconnect - return to sign in</li>
+        <li>Your name: <%= @name %></li>
+        <li>Your gender: <%= @gender %></li>
     </ul>
 </small>
 

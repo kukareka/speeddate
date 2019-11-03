@@ -7,7 +7,7 @@ class ChatBase {
   }
 
   start() {
-    navigator.getUserMedia({video:true}, (stream) => this.handleLocalStream(stream), this.handleError);
+    navigator.getUserMedia({audio: true, video:true}, (stream) => this.handleLocalStream(stream), this.handleError);
   }
 
   handleLocalStream(stream) {
@@ -135,7 +135,7 @@ class ChatFemale extends ChatBase {
 
 let gender, topic, chat
 
-function updateChat() {
+function restartChat() {
   if (chat != null) {
     chat.disconnect()
     chat = null
@@ -150,7 +150,7 @@ function updateChat() {
   }
 }
 
-function onPhxUpdate() {
+function updateChat() {
   let g, t
 
   let localVideo = document.getElementById("localVideo")
@@ -165,8 +165,25 @@ function onPhxUpdate() {
     gender = g
     topic = t
     console.log(`Updating chat: gender=${gender} topic=${topic}`)
-    updateChat()
+    restartChat()
   }
+}
+
+function updatePreview() {
+  let previewVideo = document.getElementById("previewVideo")
+  if (previewVideo == null) return
+  if (previewVideo.srcObject != null) return
+
+  navigator.getUserMedia(
+    {audio: true, video:true},
+    (stream) => previewVideo.srcObject = stream,
+    (error) => console.log(error)
+  )
+}
+
+function onPhxUpdate() {
+  updateChat()
+  updatePreview()
 }
 
 document.addEventListener("phx:update", onPhxUpdate)

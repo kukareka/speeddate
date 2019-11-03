@@ -1,7 +1,9 @@
 <h2>Waiting for an opponent&hellip;</h2>
-<ul>
+<div class="videos">
+    <video id="previewVideo" autoplay muted="true"/></video>
+</div>
+<div class="buttons"><input type="button" phx-click="disconnect" value="Disconnect"/></div>
+<small>
     <li>Your name: <%= @name %></li>
     <li>Your gender: <%= @gender %></li>
-</ul>
-<div class="buttons"><input type="button" phx-click="disconnect" value="Disconnect"/></div>
-
+</small>
