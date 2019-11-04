@@ -1,7 +1,7 @@
 <h2>Chat with <%= @opponent_name %></h2>
 <div class="videos">
-    <video id="localVideo" autoplay muted="true" data-gender="<%= @gender %>" data-topic="chat:<%= @chat_topic %>"></video>
-    <video id="remoteVideo" autoplay/></video>
+    <video id="localVideo" autoplay muted playsinline data-gender="<%= @gender %>" data-topic="chat:<%= @chat_topic %>"></video>
+    <video id="remoteVideo" autoplay playsinline/></video>
 </div>
 <div class="buttons">
     <input type="button" phx-click="rematch" value="Rematch"/>

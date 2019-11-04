@@ -7,13 +7,12 @@ class ChatBase {
   }
 
   start() {
-    navigator.getUserMedia({audio: true, video:true}, (stream) => this.handleLocalStream(stream), this.handleError);
+    getUserMedia(document.getElementById("localVideo"), (stream) => this.handleLocalStream(stream))
   }
 
   handleLocalStream(stream) {
     console.log("Got local stream");
-    const localVideo = document.getElementById("localVideo")
-    this.localStream = localVideo.srcObject = stream
+    this.localStream = stream
     this.channel.join()
     this.createPeerConnection()
   }
@@ -67,8 +66,7 @@ class ChatBase {
 
   handleRemoteStream(event) {
     console.log("Got remote stream");
-    const remoteVideo = document.getElementById("remoteVideo");
-    remoteVideo.srcObject = event.stream;
+    playVideoStream(document.getElementById("remoteVideo"), event.stream)
   }
 
   handleRemoteSDP(sdp) {
@@ -84,7 +82,7 @@ class ChatBase {
   disconnect() {
     console.log("Disconnect")
     this.channel.leave()
-    this.localStream.getTracks().forEach((track) => track.stop())
+    stopVideoStream(this.localStream)
   }
 }
 
@@ -169,16 +167,46 @@ function updateChat() {
   }
 }
 
+function stopVideoStream(stream) {
+  stream.getTracks().forEach((track) => track.stop())
+}
+
+function getUserMedia(video, callback) {
+  navigator.mediaDevices.getUserMedia({video:true})
+    .then((stream) => {
+      playVideoStream(video, stream)
+      if (callback != null) callback(stream)
+    })
+    .catch(error => console.log(error))
+}
+
+function playVideoStream(video, stream) {
+  video.onloadedmetadata = () => video.play()
+
+  if ("srcObject" in video) {
+    video.srcObject = stream
+  } else {
+    // Avoid using this in new browsers, as it is going away.
+    video.src = window.URL.createObjectURL(stream)
+  }
+
+  setTimeout(() => video.play(), 2000) // Safari on iPhone
+}
+
+let previewStream = null
+
 function updatePreview() {
   let previewVideo = document.getElementById("previewVideo")
-  if (previewVideo == null) return
-  if (previewVideo.srcObject != null) return
+  if (previewVideo == null) {
+    if (previewStream != null) {
+      stopVideoStream(previewStream)
+      previewStream = null
+    }
+    return
+  }
+  if (previewStream != null) return
 
-  navigator.getUserMedia(
-    {audio: true, video:true},
-    (stream) => previewVideo.srcObject = stream,
-    (error) => console.log(error)
-  )
+  getUserMedia(previewVideo, (stream) => previewStream = stream)
 }
 
 function onPhxUpdate() {
