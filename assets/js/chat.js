@@ -172,7 +172,7 @@ function stopVideoStream(stream) {
 }
 
 function getUserMedia(video, callback) {
-  navigator.mediaDevices.getUserMedia({video:true})
+  navigator.mediaDevices.getUserMedia({audio: true, video: {facingMode: "user"}})
     .then((stream) => {
       playVideoStream(video, stream)
       if (callback != null) callback(stream)
